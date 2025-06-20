@@ -5,6 +5,16 @@ import { useState } from "react";
 // API 기본 URL 설정
 const API_BASE_URL = "https://hanihome-vote.shop";
 
+const apiFetch = (input: RequestInfo, init: RequestInit = {}) => {
+  const accessToken =
+    typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+  const headers = {
+    ...(init.headers || {}),
+    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+  };
+  return fetch(input, { ...init, headers });
+};
+
 interface LoginForm {
   username: string;
   password: string;
@@ -144,6 +154,10 @@ export default function ApiTestPage() {
           console.log("Login response status:", response.status);
         }
         setIsLoggedIn(true);
+        const accessToken = response.headers
+          .get("Authorization")
+          ?.replace("Bearer ", "");
+        if (accessToken) localStorage.setItem("accessToken", accessToken);
       } else {
         const errorData = await response.json();
         setMessage(`로그인 실패: ${errorData.message || "알 수 없는 오류"}`);
@@ -164,7 +178,7 @@ export default function ApiTestPage() {
     setMessage("");
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
+      const response = await apiFetch(`${API_BASE_URL}/api/v1/auth/logout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -196,12 +210,12 @@ export default function ApiTestPage() {
     setMessage("");
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/members`, {
+      const response = await apiFetch(`${API_BASE_URL}/api/v1/members`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // 쿠키 포함
+        credentials: "include",
       });
 
       if (response.ok) {
