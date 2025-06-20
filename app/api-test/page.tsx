@@ -12,7 +12,7 @@ const apiFetch = (input: RequestInfo, init: RequestInit = {}) => {
     ...(init.headers || {}),
     ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
   };
-  return fetch(input, { ...init, headers });
+  return fetch(input, { ...init, headers, credentials: "include" });
 };
 
 interface LoginForm {
@@ -183,7 +183,6 @@ export default function ApiTestPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // 쿠키 포함
       });
 
       if (response.ok) {
@@ -215,7 +214,6 @@ export default function ApiTestPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
       });
 
       if (response.ok) {
