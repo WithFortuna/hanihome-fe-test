@@ -236,6 +236,54 @@ export default function ApiTestPage() {
     }
   };
 
+  // 쿠키 생성 요청 (서버에서 쿠키를 내려줌)
+  const handleCreateCookie = async () => {
+    setLoading(true);
+    setMessage("");
+    try {
+      const response = await apiFetch(`${API_BASE_URL}/api/v1/cookie/create`, {
+        method: "GET",
+      });
+      if (response.ok) {
+        setMessage("쿠키 생성(서버에서 내려줌) 요청 성공!");
+      } else {
+        setMessage("쿠키 생성 요청 실패");
+      }
+    } catch (error) {
+      setMessage(
+        `쿠키 생성 요청 오류: ${
+          error instanceof Error ? error.message : "네트워크 오류"
+        }`
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // 쿠키 입력 요청 (클라이언트가 쿠키를 서버로 보냄)
+  const handleInputCookie = async () => {
+    setLoading(true);
+    setMessage("");
+    try {
+      const response = await apiFetch(`${API_BASE_URL}/api/v1/cookie/input`, {
+        method: "GET",
+      });
+      if (response.ok) {
+        setMessage("쿠키 입력(클라이언트가 서버로 쿠키 보냄) 요청 성공!");
+      } else {
+        setMessage("쿠키 입력 요청 실패");
+      }
+    } catch (error) {
+      setMessage(
+        `쿠키 입력 요청 오류: ${
+          error instanceof Error ? error.message : "네트워크 오류"
+        }`
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
@@ -455,6 +503,22 @@ export default function ApiTestPage() {
                 className="w-full bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
               >
                 Authorization 헤더 초기화
+              </button>
+
+              {/* API 액션 버튼들 */}
+              <button
+                onClick={handleCreateCookie}
+                disabled={loading}
+                className="w-full bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                쿠키 생성 (서버에서 내려줌)
+              </button>
+              <button
+                onClick={handleInputCookie}
+                disabled={loading}
+                className="w-full bg-yellow-700 text-white py-2 px-4 rounded-md hover:bg-yellow-800 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                쿠키 입력 (서버로 보냄)
               </button>
             </div>
 
