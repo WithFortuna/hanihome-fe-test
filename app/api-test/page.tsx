@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 // API 기본 URL 설정
-const API_BASE_URL = "https://localhost:8084";
+const API_BASE_URL = "https://hanihome-vote.shop";
 
 interface LoginForm {
   username: string;
