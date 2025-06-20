@@ -445,6 +445,19 @@ export default function ApiTestPage() {
               >
                 {loading ? "조회 중..." : "회원 조회"}
               </button>
+
+              {/* Authorization 헤더 초기화 버튼 */}
+              <button
+                onClick={() => {
+                  localStorage.removeItem("accessToken");
+                  setMessage(
+                    "Authorization 헤더(accessToken)가 초기화되었습니다."
+                  );
+                }}
+                className="w-full bg-gray-400 text-white py-2 px-4 rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
+              >
+                Authorization 헤더 초기화
+              </button>
             </div>
 
             {/* 로그인 상태 표시 */}
